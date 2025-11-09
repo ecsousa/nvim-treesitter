@@ -149,7 +149,7 @@ end
 ---@param lang string
 ---@return boolean
 local function is_installed(lang)
-  local matched_parsers = vim.api.nvim_get_runtime_file("parser/" .. lang .. ".so", true) or {}
+  local matched_parsers = vim.api.nvim_get_runtime_file("parser/" .. lang .. ".dll", true) or {}
   local install_dir = configs.get_parser_install_dir()
   if not install_dir then
     return false
@@ -342,7 +342,7 @@ local function run_install(cache_folder, install_folder, lang, repo, with_sync, 
     repo_location = repo_location:gsub("/", path_sep)
     compile_location = utils.join_path(cache_folder, repo_location)
   end
-  local parser_lib_name = utils.join_path(install_folder, lang) .. ".so"
+  local parser_lib_name = utils.join_path(install_folder, lang) .. ".dll"
 
   generate_from_grammar = repo.requires_generate_from_grammar or generate_from_grammar
 

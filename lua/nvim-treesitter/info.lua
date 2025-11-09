@@ -15,7 +15,7 @@ local function install_info()
   local parser_list = parsers.available_parsers()
   table.sort(parser_list)
   for _, lang in pairs(parser_list) do
-    local is_installed = #api.nvim_get_runtime_file("parser/" .. lang .. ".so", false) > 0
+    local is_installed = #api.nvim_get_runtime_file("parser/" .. lang .. ".dll", false) > 0
     api.nvim_out_write(lang .. string.rep(" ", max_len - #lang + 1))
     if is_installed then
       api.nvim_out_write "[✓] installed\n"

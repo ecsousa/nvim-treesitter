@@ -122,7 +122,7 @@ function M.check()
   -- Parser installation checks
   local parser_installation = { "Parser/Features" .. string.rep(" ", 9) .. "H L F I J" }
   for _, parser_name in pairs(info.installed_parsers()) do
-    local installed = #api.nvim_get_runtime_file("parser/" .. parser_name .. ".so", false)
+    local installed = #api.nvim_get_runtime_file("parser/" .. parser_name .. ".dll", false)
 
     -- Only append information about installed parsers
     if installed >= 1 then
