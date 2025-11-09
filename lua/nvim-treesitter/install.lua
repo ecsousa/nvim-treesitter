@@ -8,6 +8,8 @@ local log = require('nvim-treesitter.log')
 local parsers = require('nvim-treesitter.parsers')
 local util = require('nvim-treesitter.util')
 
+local extension = vim.fn.has('win32') and '.dll' or '.so'
+
 ---@type fun(path: string, new_path: string, flags?: table): string?
 local uv_copyfile = a.awrap(4, uv.fs_copyfile)
 
@@ -285,7 +287,7 @@ local function do_compile(logger, compile_location)
     'tree-sitter',
     'build',
     '-o',
-    'parser.so',
+    'parser' .. extension,
   }, { cwd = compile_location })
   if r.code > 0 then
     return logger:error('Error during "tree-sitter build": %s', r.stderr)
@@ -396,8 +398,8 @@ local function try_install_lang(lang, cache_dir, install_dir, generate)
     end
 
     do -- install parser
-      local parser_lib_name = fs.joinpath(compile_location, 'parser.so')
-      local install_location = fs.joinpath(install_dir, lang) .. '.so'
+      local parser_lib_name = fs.joinpath(compile_location, 'parser' .. extension)
+      local install_location = fs.joinpath(install_dir, lang) .. extension
       local err = do_install(logger, parser_lib_name, install_location)
       if err then
         return err
@@ -604,7 +606,7 @@ M.uninstall = a.async(function(languages, options)
     if not vim.list_contains(installed, lang) then
       log.warn('Parser for ' .. lang .. ' is not managed by nvim-treesitter')
     else
-      local parser = fs.joinpath(parser_dir, lang) .. '.so'
+      local parser = fs.joinpath(parser_dir, lang) .. extension
       local queries = fs.joinpath(query_dir, lang)
       tasks[#tasks + 1] = a.async(--[[@async]] function()
         local err = uninstall_lang(logger, lang, parser, queries)
